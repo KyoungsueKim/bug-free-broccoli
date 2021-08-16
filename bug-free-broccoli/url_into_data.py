@@ -10,7 +10,7 @@ import urllib.request
     
 def PrintTitle(result): #제목 형식에 맞게 출력
     print("[제목]\n {}".format(result))
-    print()
+
 def PrintDepartment(result): #제목 형식에 맞게 출력
     print("[부서]\n {}".format(result))
     print()

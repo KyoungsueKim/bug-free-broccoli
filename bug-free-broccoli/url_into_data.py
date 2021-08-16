@@ -132,3 +132,4 @@ if __name__ == '__main__':
     post_01.GetTitle()
 
     print("HelloWorld")
+    print("Beautiful")

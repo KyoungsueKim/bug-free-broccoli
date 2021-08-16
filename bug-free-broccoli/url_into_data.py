@@ -130,5 +130,4 @@ if __name__ == '__main__':
         "https://www.ajou.ac.kr/kr/ajou/notice.do?mode=view&articleNo=112368&article.offset=0&articleLimit=10")
     PrintAll(post_01)
     post_01.GetTitle()
-
     print()

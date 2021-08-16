@@ -131,4 +131,4 @@ if __name__ == '__main__':
     PrintAll(post_01)
     post_01.GetTitle()
 
-    print("HelloWorld")
+    print()

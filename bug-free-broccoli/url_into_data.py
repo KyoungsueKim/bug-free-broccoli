@@ -11,18 +11,23 @@ import urllib.request
 def PrintTitle(result): #제목 형식에 맞게 출력
     print("[제목]\n {}".format(result))
     print()
+
 def PrintDepartment(result): #제목 형식에 맞게 출력
     print("[부서]\n {}".format(result))
     print()
+
 def PrintWriter(result): #제목 형식에 맞게 출력
     print("[작성자]\n {}".format(result))
     print()
+
 def PrintWritedDay(result):
     print("[작성일]\n {}".format(result))
     print()
+
 def PrintAOV(result): #제목 형식에 맞게 출력
     print("[조회수]\n {}".format(result))
     print()
+
 def PrintTOC(result): #본문 형식에 맞게 출력
     print("[본문]\n {}".format(result))
     print()
@@ -119,8 +124,11 @@ class TotalData :
         attached = attached.replace('<title>', '')
         return attached    
 
-post_01 = TotalData("https://www.ajou.ac.kr/kr/ajou/notice.do?mode=view&articleNo=112368&article.offset=0&articleLimit=10")
-PrintAll(post_01)
 
-post_01.GetTitle()
-print()
+if __name__ == '__main__':
+    post_01 = TotalData(
+        "https://www.ajou.ac.kr/kr/ajou/notice.do?mode=view&articleNo=112368&article.offset=0&articleLimit=10")
+    PrintAll(post_01)
+
+    post_01.GetTitle()
+    print()

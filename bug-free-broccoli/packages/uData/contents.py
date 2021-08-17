@@ -97,12 +97,6 @@ def _get_text(soup: BeautifulSoup):
         else:
             result += re.sub('<.+?>', '', str(list), 0)
             result += '\n'
-
-
-    # text: str = str(text)
-    # text = text.replace("</p>", '\n')
-    # text = re.sub('<.+?>', '', text, 0)
-    # result = text
     return result
 
 

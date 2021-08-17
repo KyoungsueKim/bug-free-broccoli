@@ -25,8 +25,8 @@ def _get_title(soup: BeautifulSoup):
     title: bs4.ResultSet = soup.select_one('div.b-top-box')
     title = title.select('div.b-top-box > p > span')
 
-    b_title = 1
-    title: bs4.Tag = title[b_title]
+    span_title = 1
+    title: bs4.Tag = title[span_title]
 
     result = title.get_text()
     return result
@@ -77,16 +77,32 @@ def _get_views(soup: BeautifulSoup):
 
 
 def _get_text(soup: BeautifulSoup):
+    result = ''
     text: bs4.Tag = soup.find("div", {"class": "fr-view"})
 
-    text: str = str(text)
-    text = text.replace("</p>", '\n')
-    text = re.sub('<.+?>', '', text, 0)
-    result = text
-    # k = ""
-    # for i in range(len(text)): #와 무친 이게 되네;;
-    #     k += text[i].get_text()
-    # return k
+    text: bs4.ResultSet = text.find_all("p")
+
+    p1 = re.compile(r'"https://.+?"')
+    p2 = re.compile(r'"http://.+?"')
+    for list in text:
+        m1 = p1.search(str(list))
+        m2 = p2.search(str(list))
+        if m1 or m2: #링크가 있을 경우
+            m = m1 if m1 is not None else m2
+            result += re.sub('<.+?>', '', str(list), 0)
+            url = '(' + m.group() + ')'
+            url = re.sub('amp;', '', url)
+            result += url
+            result += '\n'
+        else:
+            result += re.sub('<.+?>', '', str(list), 0)
+            result += '\n'
+
+
+    # text: str = str(text)
+    # text = text.replace("</p>", '\n')
+    # text = re.sub('<.+?>', '', text, 0)
+    # result = text
     return result
 
 

@@ -6,13 +6,12 @@ uData.api
 입맛대로 다룰 때 필요한 메소드들을 편리하게 제공합니다.
 """
 
-from . import contents
-
+from . import contents, update
 
 def init(url: str, text: bool = True, title: bool = False, dept: bool = False, writer: bool = False,
          date: bool = False, views: bool = False):
     '''
-    uData 객체를 초기화하기 위한 메소드입니다. 다른 uData 메소드를 실행하기 전 가장 먼저 실행되어야합니다.
+    게시물의 내용을 담을 때 사용되는 Content 객체를 초기화하기 위한 메소드입니다. Content 관련 메소드를 실행하기 전 가장 먼저 실행되어야합니다.
 
     :param url: (str) 아주대학교 게시물의 url입니다.
     :param text: (bool) 게시글 <내용>을 포함시킬지 여부입니다.

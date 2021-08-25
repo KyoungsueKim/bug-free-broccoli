@@ -4,8 +4,7 @@ import urllib3
 import re
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-__NOT_REFREASHED = -1
-page_number = __NOT_REFREASHED
+_NOT_REFRESHED = -1
 
 def _get_soup():
     req = requests.get('https://www.ajou.ac.kr/kr/ajou/notice.do', verify=False)
@@ -13,8 +12,7 @@ def _get_soup():
     soup = BeautifulSoup(html, 'html.parser')
     return soup
 
-def refreash():
-
+def refresh():
     #새 게시글의 번호 검색 -> latest
     __soup = _get_soup()
     latest = __soup.find('td', {'class': 'b-num-box'}).text
@@ -25,7 +23,8 @@ def refreash():
     latest = int(latest)
 
     #새로운 게시물이 올라왔다면
-    if latest > page_number:
+    if latest > Refresh.page_number:
+
         url = __soup.find('div', {'class': 'b-title-box'})
         url = str(url)
         url = re.findall(r'<a href="(.*?)"', url)
@@ -35,12 +34,15 @@ def refreash():
         url = url.replace("']", '')
         url = 'https://www.ajou.ac.kr/kr/ajou/notice.do' + url
 
-        return Refreash(url, latest)
+        return Refresh(url, latest)
 
     else:
         return None
 
-class Refreash():
-    def __init__(self, url, page_number):
+class Refresh():
+    page_number = _NOT_REFRESHED
+
+    def __init__(self, url, number):
         self.url = url
-        self.page_number = page_number
+        self.page_number = number
+        Refresh.page_number = number

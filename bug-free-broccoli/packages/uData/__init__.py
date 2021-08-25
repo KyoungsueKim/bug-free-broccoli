@@ -1,2 +1,2 @@
 from .api import init
-from .update import refreash
+from .update import refresh, Refresh

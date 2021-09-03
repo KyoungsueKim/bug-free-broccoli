@@ -233,9 +233,9 @@
   <widget class="QPushButton" name="pushButton_sendToKakao">
    <property name="geometry">
     <rect>
-     <x>183</x>
+     <x>193</x>
      <y>140</y>
-     <width>161</width>
+     <width>151</width>
      <height>32</height>
     </rect>
    </property>
@@ -278,9 +278,9 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>5</x>
      <y>145</y>
-     <width>51</width>
+     <width>41</width>
      <height>20</height>
     </rect>
    </property>
@@ -433,14 +433,27 @@
   <widget class="QPushButton" name="pushButton_pauseTimer">
    <property name="geometry">
     <rect>
-     <x>183</x>
+     <x>193</x>
      <y>170</y>
-     <width>161</width>
+     <width>151</width>
      <height>32</height>
     </rect>
    </property>
    <property name="text">
     <string>타이머 일시정지</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_openImagePath">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>140</y>
+     <width>151</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>이미지 저장 경로 열기</string>
    </property>
   </widget>
  </widget>

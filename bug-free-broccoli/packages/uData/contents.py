@@ -112,6 +112,11 @@ class Content:
         self.__isViews = views
 
     @property
+    def isImageExist(self):
+        #TODO: post01.content으로 접근뒤 이미지가 존재한다면 post01.isImageExist가 True가 되도록
+        None
+
+    @property
     def contents(self):
         '''
         uData.init()를 통해 지정된 옵션에 따라 게시글 내용을 반환합니다.

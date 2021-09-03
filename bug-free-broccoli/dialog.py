@@ -10,7 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -69,7 +68,7 @@ class Ui_Dialog(object):
         self.label_8.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_8.setObjectName("label_8")
         self.pushButton_sendToKakao = QtWidgets.QPushButton(Dialog)
-        self.pushButton_sendToKakao.setGeometry(QtCore.QRect(183, 140, 161, 32))
+        self.pushButton_sendToKakao.setGeometry(QtCore.QRect(193, 140, 151, 32))
         self.pushButton_sendToKakao.setObjectName("pushButton_sendToKakao")
         self.spinBox_kakaoXpos = QtWidgets.QSpinBox(Dialog)
         self.spinBox_kakaoXpos.setGeometry(QtCore.QRect(190, 100, 71, 24))
@@ -82,7 +81,7 @@ class Ui_Dialog(object):
         self.spinBox_kakaoYpos.setProperty("value", 610)
         self.spinBox_kakaoYpos.setObjectName("spinBox_kakaoYpos")
         self.label_3 = QtWidgets.QLabel(Dialog)
-        self.label_3.setGeometry(QtCore.QRect(130, 145, 51, 20))
+        self.label_3.setGeometry(QtCore.QRect(5, 145, 41, 20))
         self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_3.setObjectName("label_3")
         self.line = QtWidgets.QFrame(Dialog)
@@ -126,8 +125,11 @@ class Ui_Dialog(object):
         self.label_updatedTime.setGeometry(QtCore.QRect(300, 10, 51, 16))
         self.label_updatedTime.setObjectName("label_updatedTime")
         self.pushButton_pauseTimer = QtWidgets.QPushButton(Dialog)
-        self.pushButton_pauseTimer.setGeometry(QtCore.QRect(183, 170, 161, 32))
+        self.pushButton_pauseTimer.setGeometry(QtCore.QRect(193, 170, 151, 32))
         self.pushButton_pauseTimer.setObjectName("pushButton_pauseTimer")
+        self.pushButton_openImagePath = QtWidgets.QPushButton(Dialog)
+        self.pushButton_openImagePath.setGeometry(QtCore.QRect(50, 140, 151, 32))
+        self.pushButton_openImagePath.setObjectName("pushButton_openImagePath")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -171,6 +173,7 @@ class Ui_Dialog(object):
         self.label_7.setText(_translate("Dialog", "새로고침 남은 시간(초): "))
         self.label_updatedTime.setText(_translate("Dialog", "0"))
         self.pushButton_pauseTimer.setText(_translate("Dialog", "타이머 일시정지"))
+        self.pushButton_openImagePath.setText(_translate("Dialog", "이미지 저장 경로 열기"))
 
 
 if __name__ == "__main__":

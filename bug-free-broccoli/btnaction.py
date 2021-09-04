@@ -6,7 +6,7 @@ import os
 from packages import uData
 from main import MainWindow
 
-WAIT_TIME = 5
+WAIT_TIME = 10
 
 
 def loadPost(main_window: MainWindow):
@@ -97,32 +97,32 @@ def sendImageToKakao(main_window: MainWindow):
     # 컨트롤 키 배정
     ctrl = 'ctrl' if platform.system() == 'Windows' else 'command'
 
-    # 1. 파일탐색기 가서 한번 클릭.
-    pyautogui.click(explorer_position)
-    QtTest.QTest.qWait(100)
-
     if platform.system() == 'Windows':  # windows
-        # 2. Ctrl + A 누르고 파일을 오른쪽 마우스로 붙잡기.
-        pyautogui.hotkey(ctrl, 'a')
-        QtTest.QTest.qWait(100)
-        pyautogui.mouseDown(button='left')
+        # 1. 파일탐색기로 가서 클릭
+        pyautogui.click(explorer_position)
 
-        # 3. 마우스를 카카오톡 채팅방으로 드래그하고 놓기.
-        xOffset = abs(int(main_window.label_mouseXpos.text())-explorer_position[0])
-        yOffset = abs(int(main_window.label_mouseYpos.text())-explorer_position[1])
-        pyautogui.drag(xOffset, yOffset, 1)
-        pyautogui.mouseUp(button='left')
+        # 2. Ctrl + A를 눌러 파일 전체 선택 후 마우스 30만큼 오른쪽으로 이동
+        pyautogui.hotkey(ctrl, 'a')
+        pyautogui.moveTo(explorer_position[0] + 30, explorer_position[1], duration=1)
+        QtTest.QTest.qWait(100)
+
+        # 3. 카톡창으로 드래그
+        pyautogui.dragTo(kakao_position, duration=2, button='left')
         QtTest.QTest.qWait(100)
 
         # 4. 카톡창 한번 클릭하고 엔터 눌러서 보내기.
         pyautogui.click(kakao_position)
         QtTest.QTest.qWait(100)
         pyautogui.press('Enter')
-        for i in range(WAIT_TIME):  # 업로드 될 시간 10초동안 기다리기
+        for i in range(WAIT_TIME):  # 업로드 될 시간 기다리기
             print(f"wait for {i}")
             QtTest.QTest.qWait(1000)
 
     else:  # mac os
+        # 1. 파일탐색기 가서 한번 클릭.
+        pyautogui.click(explorer_position)
+        QtTest.QTest.qWait(100)
+
         # 2. Ctrl + A 누르고 Ctrl + C로 전체 복사 하기
         pyautogui.hotkey(ctrl, 'a')
         QtTest.QTest.qWait(100)
@@ -137,7 +137,7 @@ def sendImageToKakao(main_window: MainWindow):
         pyautogui.press('Enter')
         QtTest.QTest.qWait(100)
         pyautogui.press('Enter')
-        for i in range(WAIT_TIME):  # 업로드 될 시간 10초동안 기다리기
+        for i in range(WAIT_TIME):  # 업로드 될 시간 기다리기
             print(f"wait for {i}")
             QtTest.QTest.qWait(1000)
 
@@ -147,6 +147,6 @@ def sendImageToKakao(main_window: MainWindow):
     pyautogui.hotkey(ctrl, 'a')
     QtTest.QTest.qWait(100)
     if platform.system() == 'Windows':
-        pyautogui.press('Delete')
+        pyautogui.press('delete')
     else:
         pyautogui.hotkey('command', 'backspace')

@@ -12,18 +12,18 @@ def _get_soup():
     soup = BeautifulSoup(html, 'html.parser')
     return soup
 
-def refresh():
-    #새 게시글의 번호 검색 -> latest
+def refresh(currentNumber: int):
+    #새 게시글의 번호 검색 -> page_number
     __soup = _get_soup()
-    latest = __soup.find('td', {'class': 'b-num-box'}).text
-    latest = latest.replace('\n', '')
-    latest = latest.replace('\t', '')
-    latest = latest.replace('\r', '')
-    latest = latest.replace(r"'", '')
-    latest = int(latest)
+    page_number = __soup.find('td', {'class': 'b-num-box'}).text
+    page_number = page_number.replace('\n', '')
+    page_number = page_number.replace('\t', '')
+    page_number = page_number.replace('\r', '')
+    page_number = page_number.replace(r"'", '')
+    page_number = int(page_number)
 
     #새로운 게시물이 올라왔다면
-    if latest > Refresh.page_number:
+    if page_number > currentNumber:
 
         url = __soup.find('div', {'class': 'b-title-box'})
         url = str(url)
@@ -34,13 +34,12 @@ def refresh():
         url = url.replace("']", '')
         url = 'https://www.ajou.ac.kr/kr/ajou/notice.do' + url
 
-        return Refresh(url, latest)
+        return Refresh(url, page_number)
 
     else:
         return None
 
 class Refresh():
-    page_number = _NOT_REFRESHED
 
     def __init__(self, url, number):
         self.url = url

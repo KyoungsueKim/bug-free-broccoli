@@ -1,10 +1,13 @@
 from bs4 import BeautifulSoup
+import bs4
 import requests
 import urllib3
 import re
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 _NOT_REFRESHED = -1
+
 
 def _get_soup():
     req = requests.get('https://www.ajou.ac.kr/kr/ajou/notice.do', verify=False)
@@ -12,32 +15,34 @@ def _get_soup():
     soup = BeautifulSoup(html, 'html.parser')
     return soup
 
+
 def refresh(currentNumber: int):
-    #새 게시글의 번호 검색 -> page_number
+    # 새 게시글의 번호 검색 -> page_number
     __soup = _get_soup()
-    page_number = __soup.find('td', {'class': 'b-num-box'}).text
-    page_number = page_number.replace('\n', '')
-    page_number = page_number.replace('\t', '')
-    page_number = page_number.replace('\r', '')
-    page_number = page_number.replace(r"'", '')
-    page_number = int(page_number)
+    page_number = __soup.findAll('td', {'class': 'b-num-box'})
+    post_order: int = 0
+    for index in page_number:
+        index: bs4.Tag
+        index = index.text.replace('\n', '')
+        index = index.replace('\t', '')
+        index = index.replace('\r', '')
+        index = index.replace(r"'", '')
+        try:
+            page_number = int(index)
+            break
+        except ValueError:
+            post_order += 1
+            pass
 
-    #새로운 게시물이 올라왔다면
+    # 새로운 게시물이 올라왔다면
     if page_number > currentNumber:
-
-        url = __soup.find('div', {'class': 'b-title-box'})
-        url = str(url)
-        url = re.findall(r'<a href="(.*?)"', url)
-        url = str(url)
-        url = url.replace('amp;', '')
-        url = url.replace("['", '')
-        url = url.replace("']", '')
+        url: bs4.Tag = __soup.findAll('div', {'class': 'b-title-box'})[post_order].find('a')['href']
         url = 'https://www.ajou.ac.kr/kr/ajou/notice.do' + url
-
         return Refresh(url, page_number)
 
     else:
         return None
+
 
 class Refresh():
 

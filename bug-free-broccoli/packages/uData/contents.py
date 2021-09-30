@@ -114,7 +114,8 @@ class Content:
                 result += re.sub('<.+?>', '', str(element), 0)
                 url = '(' + m.group() + ')'
                 url = re.sub('amp;', '', url)
-                result += url
+                # TODO: URL기능 비활성화됨. 필요할경우 나중에 다시 활성화할것
+                # result += url
                 result += '\n'
             else:
                 result += re.sub('<.+?>', '', str(element), 0)
@@ -129,11 +130,11 @@ class Content:
 
         contents: str = ''
 
-        #url
-        contents += f'{self.url}\n\n'
-
         if self.__isTitle:
             contents += f'[제목]: {self.title}) \n'
+
+        # url
+        contents += f'{self.url}\n\n'
 
         if self.__isDept:
             contents += f'[부서]: {self.dept} \n'

@@ -165,10 +165,19 @@ class Content:
         for element in text:
             element: bs4.Tag = element.select_one('img')
             if element is not None:  # 이미지가 존재한다면
-                element = element['data-path']
-                type = re.compile(r'\..+').search(element).group()
-                url = 'https://www.ajou.ac.kr' + element
+                element = element['src']
+                #src에서 뽑아낸 소스에 http로 시작한다면, 즉 도메인 ajou.ac.kr가 있다면
+                result = re.compile('http').match(element)
+                if result is not None:
+                    url = element
+
+                else: #src에서 뽑아낸 소스에 도메인 ajou.ac.kr이 없다면
+                    url = 'https://www.ajou.ac.kr' + element
+
+                type = re.compile(r'\.[a-zA-Z]+').findall(element)[-1] #.[a-z]로 시작하는 패턴 중 맨 뒤엣꺼 하나 뽑기. 즉 .jpg나 .png처럼 확장자를 뽑기
                 path = os.path.abspath('images')
-                os.system(f'curl {url} > {path}/{index}{type}') #curl 명령어로 이미지 다운로드
+                os.system(f'curl {url} > {path}/{index}{type}')  # curl 명령어로 이미지 다운로드
                 index += 1
                 self.hasImage = True
+
+

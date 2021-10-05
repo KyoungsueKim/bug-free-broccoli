@@ -7,11 +7,15 @@ uData.contents
 import os
 import ssl
 import urllib.request
+import warnings
+
 import bs4.element
 import requests
 from bs4 import BeautifulSoup
 import re
 import urllib3
+import pyshorteners as ps
+import apikeyconfig as apikey
 import time
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -114,7 +118,7 @@ class Content:
                 result += re.sub('<.+?>', '', str(element), 0)
                 url = '(' + m.group() + ')'
                 url = re.sub('amp;', '', url)
-                # TODO: URL기능 비활성화됨. 필요할경우 나중에 다시 활성화할것
+                # TODO: 텍스트 뒤에 URL 붙이는 기능 비활성화됨. 필요할경우 나중에 다시 활성화할것
                 # result += url
                 result += '\n'
             else:
@@ -133,8 +137,15 @@ class Content:
         if self.__isTitle:
             contents += f'[제목]: {self.title}) \n'
 
-        # url
-        contents += f'{self.url}\n\n'
+        # 게시글 url부분
+        if apikey.bitlyAPIkey != 'YOUR API KEY HERE': #api키가 안적혀있다면
+            s = ps.Shortener(api_key=apikey.bitlyAPIkey)
+            url = s.bitly.short(self.url)
+        else:
+            url = self.url
+            warnings.warn('bitlyAPIkey needed! Please type your bitly API KEY into your bug-free-broccoli/apikeyconfig.py')
+
+        contents += f'{url}\n\n'
 
         if self.__isDept:
             contents += f'[부서]: {self.dept} \n'

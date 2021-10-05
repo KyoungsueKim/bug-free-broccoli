@@ -148,6 +148,7 @@ PyQtNetworkAuth==5.15.4
 PyQtPurchasing==5.15.4
 PyRect==0.1.4
 PyScreeze==0.1.27
+pyshorteners==1.0.1
 PyTweening==1.0.3
 requests==2.26.0
 rubicon-objc==0.4.1

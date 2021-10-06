@@ -10,7 +10,14 @@ _NOT_REFRESHED = -1
 
 
 def _get_soup():
-    req = requests.get('https://www.ajou.ac.kr/kr/ajou/notice.do', verify=False)
+    while True: #가끔 서버 상황이 안좋아서 커넥션 에러가 나는 경우를 방지하기 위해 while로 계속 시도
+        try:
+            req = requests.get('https://www.ajou.ac.kr/kr/ajou/notice.do', verify=False)
+        except requests.exceptions.ConnectionError as e:
+            print(e)
+        finally:
+            if req is not None:
+                break
     html = req.text
     soup = BeautifulSoup(html, 'html.parser')
     return soup

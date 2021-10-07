@@ -7,6 +7,7 @@ from packages import uData
 from main import MainWindow
 
 WAIT_TIME = 10
+pyautogui.FAILSAFE = False
 
 
 def loadPost(main_window: MainWindow):

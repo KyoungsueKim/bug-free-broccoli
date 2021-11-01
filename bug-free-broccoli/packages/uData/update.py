@@ -10,13 +10,15 @@ _NOT_REFRESHED = -1
 
 
 def _get_soup():
+    status = 0
     while True: #가끔 서버 상황이 안좋아서 커넥션 에러가 나는 경우를 방지하기 위해 while로 계속 시도
         try:
             req = requests.get('https://www.ajou.ac.kr/kr/ajou/notice.do', verify=False)
+            status = 1
         except requests.exceptions.ConnectionError as e:
             print(e)
         finally:
-            if req is not None:
+            if status == 1:
                 break
     html = req.text
     soup = BeautifulSoup(html, 'html.parser')
@@ -42,10 +44,13 @@ def refresh(currentNumber: int):
             pass
 
     # 새로운 게시물이 올라왔다면
-    if page_number > currentNumber:
-        url: bs4.Tag = __soup.findAll('div', {'class': 'b-title-box'})[post_order].find('a')['href']
-        url = 'https://www.ajou.ac.kr/kr/ajou/notice.do' + url
-        return Refresh(url, page_number)
+    try:
+        if page_number > currentNumber:
+            url: bs4.Tag = __soup.findAll('div', {'class': 'b-title-box'})[post_order].find('a')['href']
+            url = 'https://www.ajou.ac.kr/kr/ajou/notice.do' + url
+            return Refresh(url, page_number)
+    except TypeError:
+        return None
 
     else:
         return None

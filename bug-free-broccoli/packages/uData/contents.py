@@ -138,7 +138,7 @@ class Content:
             contents += f'[제목]: {self.title}) \n'
 
         # 게시글 url부분
-        if apikey.bitlyAPIkey != 'YOUR API KEY HERE': #api키가 안적혀있다면
+        if apikey.bitlyAPIkey != 'YOUR API KEY HERE': #api키가 뭐라도 적혀있다면
             s = ps.Shortener(api_key=apikey.bitlyAPIkey)
             url = s.bitly.short(self.url)
         else:

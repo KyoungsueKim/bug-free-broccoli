@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'dialog.ui'
+# Form implementation generated from reading ui file 'main_dialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -195,13 +195,3 @@ class Ui_Dialog(object):
         self.pushButton_openImagePath.setText(_translate("Dialog", "이미지 저장 경로 열기"))
         self.label_9.setText(_translate("Dialog", "파일 탐색기 영역:"))
         self.pushButton_sendImageToKakaoDebug.setText(_translate("Dialog", "카카오톡 이미지 발송"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
-    ui.setupUi(Dialog)
-    Dialog.show()
-    sys.exit(app.exec_())

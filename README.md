@@ -22,11 +22,14 @@
 * `clipboard` ~= 0.0.4
 
 ## Installation
+### 1. 다운로드 및 requirements 설치
 ```Shell
 git clone https://github.com/KyoungsueKim/bug-free-broccoli
 cd bug-free-broccoli
 pip install -r requirements.txt
 ```
+### 2. API키 입력 (optional)
+apikeyconfig.py에서 필요한 기능의 API 키를 입력
 
 ## Run
 ```Shell

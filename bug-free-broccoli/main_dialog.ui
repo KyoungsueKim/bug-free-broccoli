@@ -526,7 +526,12 @@
   <tabstop>pushButton_checkBoard</tabstop>
   <tabstop>spinBox_kakaoXpos</tabstop>
   <tabstop>spinBox_kakaoYpos</tabstop>
+  <tabstop>spinBox_explorerXpos</tabstop>
+  <tabstop>spinBox_explorerYpos</tabstop>
+  <tabstop>pushButton_openImagePath</tabstop>
   <tabstop>pushButton_sendToKakaoDebug</tabstop>
+  <tabstop>pushButton_pauseTimer</tabstop>
+  <tabstop>pushButton_sendImageToKakaoDebug</tabstop>
   <tabstop>lineEdit_URL</tabstop>
   <tabstop>pushButton_loadPost</tabstop>
   <tabstop>checkBox_text</tabstop>

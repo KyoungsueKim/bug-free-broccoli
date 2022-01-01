@@ -6,7 +6,7 @@ uData.api
 입맛대로 다룰 때 필요한 메소드들을 편리하게 제공합니다.
 """
 
-from . import contents, update
+from . import contents, check_post
 
 def init(url: str, text: bool = True, title: bool = False, dept: bool = False, writer: bool = False,
          date: bool = False, views: bool = False):

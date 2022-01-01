@@ -60,7 +60,6 @@ class MainWindow(Ui_Dialog):
 
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog() # Dialog windows의 가장 베이스가 되는 클래스입니다. 이 위에 필요한 GUI 컴포넌트들을 쌓을 수 있습니다. 자세한건 레퍼런스 참조..
     MainWindow().setupUi(Dialog) # 위에서 미리 정의해둔 UI 컴포넌트들을 Dialog에 쌓습니다.

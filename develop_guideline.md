@@ -1,5 +1,5 @@
 # Develop Guideline
---------------------
+
 ## 프로그램 GUI 수정
 <img width="351" alt="image" src="https://user-images.githubusercontent.com/61102713/147847784-02bc9139-3a06-4699-b89d-215a74fdd4eb.png">
 

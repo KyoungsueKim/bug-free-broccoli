@@ -7,4 +7,4 @@ import enum
 from enum import Enum
 
 class uType(Enum):
-    AJOUNOTICE = enum.auto # 아주대학교 공지사항 게시판 (https://www.ajou.ac.kr/kr/ajou/notice.do)
+    AJOUNOTICE = 'ajounotice' # 아주대학교 공지사항 게시판 (https://www.ajou.ac.kr/kr/ajou/notice.do)

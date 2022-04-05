@@ -1,12 +1,7 @@
 """
-uData.contents
-~~~~~~~~~~~~~~
-
-이 uData.contents 모듈은 Contents 객체를 관리하는 모듈입니다.
+이 uData.contents는 Contents 클래스를 정의합니다.
 """
 import os
-import ssl
-import urllib.request
 import warnings
 
 import bs4.element
@@ -16,10 +11,9 @@ import re
 import urllib3
 import pyshorteners as ps
 import apikeyconfig as apikey
-import time
 
+# SSL 인증서 관련 오류로 가끔 request가 안되는 경우가 발생하여 InsecureRequestWarning을 무시함.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 
 def _get_soup(url: str):
     response = requests.get(url, verify=False)

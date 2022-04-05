@@ -1,3 +1,7 @@
+'''
+이 check_post는 크롤링하고자 하는 게시판에 새로운 게시물이
+'''
+
 from bs4 import BeautifulSoup
 import bs4
 import requests

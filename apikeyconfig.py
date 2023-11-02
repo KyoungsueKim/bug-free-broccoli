@@ -1,1 +1,1 @@
-bitlyAPIkey: str = 'YOUR API KEY HERE'
+bitlyAPIkey: str = '88065e2706a793d88b7492d89257dfb8e3ff3ba6'

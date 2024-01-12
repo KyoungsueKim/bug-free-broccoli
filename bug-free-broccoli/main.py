@@ -1,4 +1,4 @@
-from PySide6 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from main_dialog import Ui_Dialog
 from packages import uData
 import btn_action

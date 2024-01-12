@@ -1,4 +1,4 @@
-from PySide6 import QtTest, QtWidgets
+from PyQt5 import QtTest, QtWidgets
 import pyautogui
 import clipboard
 import platform
@@ -6,11 +6,8 @@ import os
 from packages import uData
 from main import MainWindow
 
-WAIT_TIME = 10
+WAIT_TIME = 20
 pyautogui.FAILSAFE = False
-
-
-current_numbers = {'https://ece.ajou.ac.kr/ece/bachelor/notice.do': 0, 'https://sw.ajou.ac.kr/sw/board/notice.do': 0}
 
 
 def loadPost(main_window: MainWindow):
@@ -32,12 +29,10 @@ def loadPost(main_window: MainWindow):
     main_post.saveImage()
 
 
-def checkBoard(main_window: MainWindow, url: str, current_number: int):
-    global current_numbers
-
-    check: uData.update.Refresh = uData.refresh(currentNumber=current_number, notice_url=url)
+def checkBoard(main_window: MainWindow):
+    current_number = int(main_window.label_currPostNum.text())
+    check: uData.update.Refresh = uData.refresh(current_number)
     if check is not None:
-        current_numbers[url] = check.page_number
         main_window.label_currPostNum.setText(str(check.page_number))
         main_window.lineEdit_URL.setText(check.url)
         loadPost(main_window)
@@ -74,18 +69,14 @@ def resetBoardCheckTimer(main_window: MainWindow):
 
 
 def sendNotification(main_window: MainWindow):
-    for url, current_number in current_numbers.items():
-        checkBoard(main_window, url=url, current_number=current_number)  # checkBoard가 GUI상의 게시글 번호를 업데이트 해줌.
-        # previousPageNumber = int(main_window.label_currPostNum.text())
+    previousPageNumber = int(main_window.label_currPostNum.text())
+    checkBoard(main_window)  # checkBoard가 GUI상의 게시글 번호를 업데이트 해줌.
 
-        if main_post.page_number != current_number:  # 이전 게시글 넘버와 새롭게 체크한 게시글 넘버가 다르다면, 즉 업데이트된 글이 있다면
-            if main_post.hasImage == True:
-                sendImageToKakao(main_window)
-            sendTextToKakao(main_window)
-            resetBoardCheckTimer(main_window)
-
-            current_numbers[url] = main_post.page_number
-
+    if main_post.page_number != previousPageNumber:  # 이전 게시글 넘버와 새롭게 체크한 게시글 넘버가 다르다면, 즉 업데이트된 글이 있다면
+        if main_post.hasImage == True:
+            sendImageToKakao(main_window)
+        sendTextToKakao(main_window)
+        resetBoardCheckTimer(main_window)
 
 
 # TODO: pauseTimer 구현
@@ -149,11 +140,10 @@ def sendImageToKakao(main_window: MainWindow):
         pyautogui.press('Enter')
         for i in range(WAIT_TIME):  # 업로드 될 시간 기다리기
             print(f"wait for {i}")
-            QtTest.QTest.qWait(1000)
+            QtTest.QTest.qWait(2000)
 
     # 5. 다시 파일탐색기 가서 이미지 폴더 내용 싹 비우기
     file_list = os.listdir('images')
-
     for file_name in file_list:
         file_path = os.path.join('images', file_name)
         if os.path.isfile(file_path):

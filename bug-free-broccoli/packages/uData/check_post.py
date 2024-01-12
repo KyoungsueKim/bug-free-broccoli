@@ -9,13 +9,11 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 _NOT_REFRESHED = -1
 
 
-
-
-def _get_soup(url: str):
+def _get_soup():
     status = 0
     while True: #가끔 서버 상황이 안좋아서 커넥션 에러가 나는 경우를 방지하기 위해 while로 계속 시도
         try:
-            req = requests.get(url, verify=False)
+            req = requests.get('https://www.ajou.ac.kr/kr/ajou/notice.do', verify=False)
             status = 1
         except requests.exceptions.ConnectionError as e:
             print(e)
@@ -27,9 +25,9 @@ def _get_soup(url: str):
     return soup
 
 
-def refresh(currentNumber: int, notice_url: str):
+def refresh(currentNumber: int):
     # 새 게시글의 번호 검색 -> page_number
-    __soup = _get_soup(notice_url)
+    __soup = _get_soup()
     page_number = __soup.findAll('td', {'class': 'b-num-box'})
     post_order: int = 0
     for index in page_number:
@@ -49,7 +47,7 @@ def refresh(currentNumber: int, notice_url: str):
     try:
         if page_number > currentNumber:
             url: bs4.Tag = __soup.findAll('div', {'class': 'b-title-box'})[post_order].find('a')['href']
-            url = notice_url + url
+            url = 'https://www.ajou.ac.kr/kr/ajou/notice.do' + url
             return Refresh(url, page_number)
     except TypeError:
         return None

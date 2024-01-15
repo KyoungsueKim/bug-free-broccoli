@@ -6,7 +6,7 @@ import os
 from packages import uData
 from main import MainWindow
 
-WAIT_TIME = 20
+WAIT_TIME = 10
 pyautogui.FAILSAFE = False
 
 

@@ -33,9 +33,17 @@ def checkBoard(main_window: MainWindow):
     current_number = int(main_window.label_currPostNum.text())
     check: uData.update.Refresh = uData.refresh(current_number)
     if check is not None:
+        # 게시글 번호는 항상 업데이트 (필터링된 게시물도 번호는 기록)
         main_window.label_currPostNum.setText(str(check.page_number))
-        main_window.lineEdit_URL.setText(check.url)
-        loadPost(main_window)
+        
+        # 필터링되지 않은 게시물만 로드
+        if not hasattr(check, 'is_filtered') or not check.is_filtered:
+            main_window.lineEdit_URL.setText(check.url)
+            loadPost(main_window)
+            return True  # 새 게시물이 로드됨
+        else:
+            return False  # 게시물이 필터링됨
+    return False  # 새 게시물이 없음
 
 
 def sendTextToKakao(main_window: MainWindow):
@@ -70,13 +78,15 @@ def resetBoardCheckTimer(main_window: MainWindow):
 
 def sendNotification(main_window: MainWindow):
     previousPageNumber = int(main_window.label_currPostNum.text())
-    checkBoard(main_window)  # checkBoard가 GUI상의 게시글 번호를 업데이트 해줌.
-
-    if main_post.page_number != previousPageNumber:  # 이전 게시글 넘버와 새롭게 체크한 게시글 넘버가 다르다면, 즉 업데이트된 글이 있다면
-        if main_post.hasImage == True:
-            sendImageToKakao(main_window)
-        sendTextToKakao(main_window)
-        resetBoardCheckTimer(main_window)
+    new_post_loaded = checkBoard(main_window)  # checkBoard가 새 게시물 로드 여부를 반환
+    
+    # 새 게시물이 로드되었고, main_post가 존재하는 경우에만 알림 발송
+    if new_post_loaded and 'main_post' in globals():
+        if main_post.page_number != previousPageNumber:  # 이전 게시글 넘버와 새롭게 체크한 게시글 넘버가 다르다면
+            if main_post.hasImage == True:
+                sendImageToKakao(main_window)
+            sendTextToKakao(main_window)
+            resetBoardCheckTimer(main_window)
 
 
 # TODO: pauseTimer 구현

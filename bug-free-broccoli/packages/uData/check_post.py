@@ -57,15 +57,15 @@ def refresh(currentNumber: int):
             # 게시물 제목과 URL을 가져옴
             title_box = __soup.findAll('div', {'class': 'b-title-box'})[post_order]
             title_text = title_box.find('a').text.strip()
+            url: bs4.Tag = title_box.find('a')['href']
+            url = 'https://www.ajou.ac.kr/kr/ajou/notice.do' + url
             
             # 제목에 건너뛸 키워드가 포함되어 있는지 확인
             for keyword in SKIP_KEYWORDS:
                 if keyword in title_text:
                     print(f"'{keyword}' 관련 게시물 건너뛰기: {title_text}")
-                    return None
+                    return Refresh(url, page_number, is_filtered=True)
                 
-            url: bs4.Tag = title_box.find('a')['href']
-            url = 'https://www.ajou.ac.kr/kr/ajou/notice.do' + url
             return Refresh(url, page_number)
     except TypeError:
         return None
@@ -76,7 +76,8 @@ def refresh(currentNumber: int):
 
 class Refresh():
 
-    def __init__(self, url, number):
+    def __init__(self, url, number, is_filtered=False):
         self.url = url
         self.page_number = number
+        self.is_filtered = is_filtered  # 필터링 여부를 나타내는 속성 추가
         Refresh.page_number = number

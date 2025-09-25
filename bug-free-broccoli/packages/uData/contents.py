@@ -138,12 +138,14 @@ class Content:
             contents += f'[제목]: {self.title}) \n'
 
         # 게시글 url부분
-        if apikey.bitlyAPIkey != 'YOUR API KEY HERE': #api키가 뭐라도 적혀있다면
-            s = ps.Shortener(api_key=apikey.bitlyAPIkey)
-            url = s.bitly.short(self.url)
-        else:
-            url = self.url
-            warnings.warn('bitlyAPIkey needed! Please type your bitly API KEY into your bug-free-broccoli/apikeyconfig.py')
+        # if apikey.bitlyAPIkey != 'YOUR API KEY HERE': #api키가 뭐라도 적혀있다면
+        #     s = ps.Shortener(api_key=apikey.bitlyAPIkey)
+        #     url = s.bitly.short(self.url)
+        # else:
+        #     url = self.url
+        #     warnings.warn('bitlyAPIkey needed! Please type your bitly API KEY into your bug-free-broccoli/apikeyconfig.py')
+
+        url = self.url
 
         contents += f'{url}\n\n'
 

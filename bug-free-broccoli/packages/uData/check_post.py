@@ -17,6 +17,7 @@ BASE_URL = "https://www.ajou.ac.kr/kr/ajou/notice.do"
 # 크롤링을 건너뛸 키워드 Set
 SKIP_KEYWORDS = {
     "예비군",
+    "구글 AI",
     # 필요시 여기에 더 많은 키워드를 추가할 수 있습니다
     # "동원훈련",
     # "민방위",

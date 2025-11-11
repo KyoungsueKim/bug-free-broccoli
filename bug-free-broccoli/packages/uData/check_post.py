@@ -18,7 +18,8 @@ BASE_URL = "https://www.ajou.ac.kr/kr/ajou/notice.do"
 SKIP_KEYWORDS = {
     "예비군",
     "구글 AI",
-    "컴퓨터활용능력"
+    "컴퓨터활용능력",
+    "컴활"
     # 필요시 여기에 더 많은 키워드를 추가할 수 있습니다
     # "동원훈련",
     # "민방위",

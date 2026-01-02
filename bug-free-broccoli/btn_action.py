@@ -33,11 +33,9 @@ def checkBoard(main_window: MainWindow):
     current_number = int(main_window.label_currPostNum.text())
     check: uData.update.Refresh = uData.refresh(current_number)
     if check is not None:
-        # 게시글 번호는 항상 업데이트 (필터링된 게시물도 번호는 기록)
-        main_window.label_currPostNum.setText(str(check.page_number))
-        
-        # 필터링되지 않은 게시물만 로드
+        # 필터링되지 않은 게시물만 기준 번호를 갱신하고 로드
         if not hasattr(check, 'is_filtered') or not check.is_filtered:
+            main_window.label_currPostNum.setText(str(check.page_number))
             main_window.lineEdit_URL.setText(check.url)
             loadPost(main_window)
             return True  # 새 게시물이 로드됨

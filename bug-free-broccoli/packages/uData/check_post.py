@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 from typing import Iterable, List, Optional, Tuple
-from urllib.parse import urljoin
+from urllib.parse import parse_qs, urljoin, urlparse
 
 import bs4
 from bs4 import BeautifulSoup
@@ -31,9 +31,10 @@ SKIP_KEYWORDS = {
 class PostSummary:
     """게시판에서 추출한 게시글의 최소 정보"""
 
-    number: int
+    article_no: int
     title: str
     url: str
+    board_number: Optional[int] = None
 
     def contains_skip_keyword(self) -> bool:
         """게시글 제목에 필터링 키워드가 포함되어 있는지 여부"""
@@ -62,8 +63,8 @@ def _clean_text(text: str) -> str:
     return " ".join(text.replace("\n", " ").replace("\t", " ").replace("\r", " ").split())
 
 
-def _extract_post_number(tag: bs4.Tag) -> Optional[int]:
-    """게시판의 번호 영역에서 정수 게시글 번호만 추출합니다."""
+def _extract_board_number(tag: bs4.Tag) -> Optional[int]:
+    """게시판의 번호 영역에서 화면 노출용 번호만 추출합니다."""
 
     cleaned = _clean_text(tag.text)
     digits = "".join(character for character in cleaned if character.isdigit())
@@ -82,37 +83,61 @@ def _extract_post_title(tag: bs4.Tag) -> Tuple[str, Optional[str]]:
     return title, href
 
 
+def _extract_article_no(relative_url: str) -> Optional[int]:
+    """게시글 상세 URL에서 articleNo를 추출합니다."""
+
+    query = urlparse(relative_url).query
+    values = parse_qs(query).get("articleNo")
+    if not values:
+        return None
+
+    digits = "".join(character for character in values[0] if character.isdigit())
+    return int(digits) if digits else None
+
+
 def _parse_posts(soup: BeautifulSoup) -> List[PostSummary]:
-    """공지사항 목록 페이지에서 실제 게시글 정보만 추려냅니다."""
+    """공지사항 목록 페이지에서 게시글 정보를 추려냅니다."""
 
     number_tags = soup.find_all("td", {"class": "b-num-box"})
     title_tags = soup.find_all("div", {"class": "b-title-box"})
 
     posts: List[PostSummary] = []
     for number_tag, title_tag in zip(number_tags, title_tags):
-        number = _extract_post_number(number_tag)
-        if number is None:
-            continue
+        board_number = _extract_board_number(number_tag)
 
         title, relative_url = _extract_post_title(title_tag)
         if not title or relative_url is None:
             continue
 
-        posts.append(PostSummary(number=number, title=title, url=urljoin(BASE_URL, relative_url)))
+        article_no = _extract_article_no(relative_url)
+        if article_no is None:
+            continue
+
+        posts.append(
+            PostSummary(
+                article_no=article_no,
+                title=title,
+                url=urljoin(BASE_URL, relative_url),
+                board_number=board_number,
+            )
+        )
 
     return posts
 
 
-def _find_new_post(posts: Iterable[PostSummary], current_number: int) -> Tuple[Optional[PostSummary], List[PostSummary]]:
+def _find_new_post(
+    posts: Iterable[PostSummary],
+    current_article_no: int,
+) -> Tuple[Optional[PostSummary], List[PostSummary]]:
     """
-    현재 번호보다 큰 게시글 중 필터링 키워드가 없는 최신 게시글을 찾습니다.
+    마지막으로 업로드된 articleNo 이후의 게시글 중 필터링 키워드가 없는 최신 게시글을 찾습니다.
     함께 조회된 필터링 대상 게시글 목록도 반환하여 후속 처리에 활용합니다.
     """
 
     skipped_posts: List[PostSummary] = []
 
-    for post in sorted(posts, key=lambda candidate: candidate.number, reverse=True):
-        if post.number <= current_number:
+    for post in sorted(posts, key=lambda candidate: candidate.article_no, reverse=True):
+        if post.article_no <= current_article_no:
             break
 
         if post.contains_skip_keyword():
@@ -124,25 +149,26 @@ def _find_new_post(posts: Iterable[PostSummary], current_number: int) -> Tuple[O
     return None, skipped_posts
 
 
-def refresh(current_number: int) -> Optional["Refresh"]:
-    """현재 저장된 게시글 번호 이후의 새 게시글을 조회합니다."""
+def refresh(current_article_no: int) -> Optional["Refresh"]:
+    """마지막으로 업로드한 articleNo 이후의 새 게시글을 조회합니다."""
 
     soup = _fetch_board()
     posts = _parse_posts(soup)
 
-    target_post, skipped_posts = _find_new_post(posts, current_number)
+    target_post, skipped_posts = _find_new_post(posts, current_article_no)
 
     for skipped in skipped_posts:
+        board_hint = f"(게시판 표시 번호: {skipped.board_number})" if skipped.board_number else ""
         print(
-            f"게시글 번호 {skipped.number} - '{skipped.title}' 게시물은 필터링 키워드로 인해 건너뜁니다."
+            f"articleNo {skipped.article_no} {board_hint} - '{skipped.title}' 게시물은 필터링 키워드로 인해 건너뜁니다."
         )
 
     if target_post is not None:
-        return Refresh(target_post.url, target_post.number)
+        return Refresh(target_post.url, target_post.article_no)
 
     if skipped_posts:
         latest_skipped = skipped_posts[0]
-        return Refresh(latest_skipped.url, latest_skipped.number, is_filtered=True)
+        return Refresh(latest_skipped.url, latest_skipped.article_no, is_filtered=True)
 
     return None
 
@@ -150,8 +176,9 @@ def refresh(current_number: int) -> Optional["Refresh"]:
 class Refresh:
     """새로운 게시글 정보를 담는 단순 DTO."""
 
-    def __init__(self, url: str, number: int, is_filtered: bool = False) -> None:
+    def __init__(self, url: str, article_no: int, is_filtered: bool = False) -> None:
         self.url = url
-        self.page_number = number
+        self.page_number = article_no
         self.is_filtered = is_filtered
-        Refresh.page_number = number
+        if not is_filtered:
+            Refresh.page_number = article_no

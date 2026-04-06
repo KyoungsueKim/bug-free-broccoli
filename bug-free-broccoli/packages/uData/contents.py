@@ -135,7 +135,7 @@ class Content:
         contents: str = ''
 
         if self.__isTitle:
-            contents += f'[제목]: {self.title}) \n'
+            contents += f'[제목]: ({self.dept}) {self.title}) \n'
 
         # 게시글 url부분
         # if apikey.bitlyAPIkey != 'YOUR API KEY HERE': #api키가 뭐라도 적혀있다면
@@ -149,8 +149,8 @@ class Content:
 
         contents += f'{url}\n\n'
 
-        if self.__isDept:
-            contents += f'[부서]: {self.dept} \n'
+        # if self.__isDept:
+        #     contents += f'[부서]: {self.dept} \n'
 
         if self.__isWriter:
             contents += f'[작성자]: {self.writer} \n'
